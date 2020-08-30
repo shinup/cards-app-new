@@ -3,9 +3,7 @@ import Card from 'react-bootstrap/Card';
 import '../box.css';
 
 
-const ImageCard = ({ name, imageUrl, type, text, set }) => {   
-
-    console.log(imageUrl)
+const ImageCard = ({ name, imageUrl, type, text, set }) => {       
     return (
       <>
         <Card style={{ width: '5rem' }} className="box mb-2" border="primary" bg ="dark" text="light">        

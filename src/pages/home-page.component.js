@@ -7,7 +7,7 @@ import Loading from '../components/spinner.component'
 import '../box.css';
 let page = 0;
 
-function HomePage() {
+const HomePage = () => {     
     const [items, setItems] = useState([]);
     const [initialized, setInitialized] = useState(false);
     const [totalCards, setTotalCards] = useState(0);

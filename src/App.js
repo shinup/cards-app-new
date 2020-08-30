@@ -1,19 +1,24 @@
 import React from 'react';
-import HomePage from './pages/home-page.component';
-import { Navbar } from 'react-bootstrap';
+import { Router, Route } from "react-router-dom"; 
 import './App.css';
+import { createBrowserHistory as createHistory } from "history";  
 
-function App() {
-  return (
-    <div className="App">   
-        <Navbar bg="dark" expand="dark" variant="dark" >
-          <Navbar.Brand href="/">Cards</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-          </Navbar.Collapse>
-        </Navbar>
-        <HomePage/> 
-    </div>
-  );
+
+import Header from "./components/header.component";  
+import HomePage from './pages/home-page.component';
+import CardSearchPage from './pages/search-page.component';
+
+const history = createHistory();
+
+function App() {  
+  return (  
+    <div className="App">  
+      <Router history={history}>  
+        <Header />  
+        <Route path="/" exact component={HomePage} />  
+        <Route path="/search" exact component={CardSearchPage} />  
+      </Router>  
+    </div>  
+  );  
 }
 export default App;
