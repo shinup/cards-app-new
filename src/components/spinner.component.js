@@ -6,9 +6,10 @@ import '../box.css';
 const Loading = () => {       
     return (
       <>
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-       </Spinner>
+        <Spinner animation="border" size="sm" />
+        <Spinner animation="border" />
+        <Spinner animation="grow" size="sm" />
+        <Spinner animation="grow" />
       </>
     );
   };

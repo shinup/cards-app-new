@@ -1,6 +1,6 @@
 import React from 'react';
-import HomePage from './pages/HomePage';
-import { Navbar, Container, Row, Col } from 'react-bootstrap';
+import HomePage from './pages/home-page.component';
+import { Navbar } from 'react-bootstrap';
 import './App.css';
 
 function App() {
