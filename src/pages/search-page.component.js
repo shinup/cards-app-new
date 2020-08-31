@@ -1,12 +1,14 @@
 import React from "react";  
+import { useState } from "react";  
 import { Formik } from "formik";  
 import Form from "react-bootstrap/Form";  
 import Col from "react-bootstrap/Col";  
 import Button from "react-bootstrap/Button";  
 import * as yup from "yup";  
 import InfiniteScroll from "react-infinite-scroller";  
-import { searchCards } from '../data/request';
 
+import { searchCards } from '../data/request';
+import CardList from '../components/card-list.component'
 import Loading from '../components/spinner.component'
 import ImageCard from '../components/card.component'
 
@@ -15,11 +17,12 @@ const schema = yup.object({
 });
 
 const CardSearchPage = () => {     
-  const [cards, setCards] = React.useState([]);  
-  const [keyword, setKeyword] = React.useState([]);  
-  const [page, setPage] = React.useState(1);  
-  const [totalCards, setTotal] = React.useState(0);  
-  const [searching, setSearching] = React.useState(false); 
+
+  const [cards, setCards] = useState([]);  
+  const [keyword, setKeyword] = useState([]);  
+  const [page, setPage] = useState(1);  
+  const [totalCards, setTotal] = useState(0);  
+  const [searching, setSearching] = useState(false); 
 
   const handleSubmit = async evt => {  
     const isValid = await schema.validate(evt);  
@@ -34,9 +37,7 @@ const CardSearchPage = () => {
     setSearching(true); 
     const response = await searchCards(keyword, page);  
     let items = response.data.cards;  
-    setCards(items);  
-    setTotal(response.data._totalCount);  
-    setPage(pg);  
+    setData(items, response, pg)
   }; 
 
   const getMoreCards = async () => {  
@@ -44,12 +45,14 @@ const CardSearchPage = () => {
     pg++;  
     const response = await searchCards(keyword, pg);  
     const items = cards.concat(response.data.cards);  
-    setCards(items);  
-    setTotal(response.data.total);  
-    setPage(pg);  
+    setData(items, response, pg)
   }; 
 
-  React.useEffect(() => {}); 
+  const setData = (items, response, page) => {  
+    setCards(items);  
+    setTotal(response.data._totalCount);  
+    setPage(page);  
+  }
 
   return (  
     <div className="container fluid">  
@@ -98,7 +101,8 @@ const CardSearchPage = () => {
             {cards.map((card, index) =>               
             <ImageCard key = {index} {...card} />
             )}
-        </div>        
+        </div>  
+        <CardList items={cards} ></CardList>        
         </InfiniteScroll>
     </div>  
   );  

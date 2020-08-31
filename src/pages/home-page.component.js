@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { getCards } from '../data/request';
 import ImageCard from '../components/card.component'
+import CardList from '../components/card-list.component'
 import Loading from '../components/spinner.component'
 import '../box.css';
 let page = 0;
@@ -32,11 +33,8 @@ const HomePage = () => {
                 hasMore={totalCards > items.length}
                 loader={<Loading/>}
                 threshold={5}
-            >   <div className="grid">            
-                {items.map((card, index) =>               
-                    <ImageCard key = {index} {...card} />
-                )}
-                </div>        
+            >
+            <CardList items={items} ></CardList>  
             </InfiniteScroll>
         </div>
     );
