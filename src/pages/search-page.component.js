@@ -10,7 +10,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { searchCards } from '../data/request';
 import CardList from '../components/card-list.component'
 import Loading from '../components/spinner.component'
-import ImageCard from '../components/card.component'
+import Error from '../components/error.component'
 
 const schema = yup.object({  
   keyword: yup.string().required("Please enter name")  
@@ -23,6 +23,7 @@ const CardSearchPage = () => {
   const [page, setPage] = useState(1);  
   const [totalCards, setTotal] = useState(0);  
   const [searching, setSearching] = useState(false); 
+  const [hasError, setHasError] = useState(false);
 
   const handleSubmit = async evt => {  
     const isValid = await schema.validate(evt);  
@@ -33,19 +34,35 @@ const CardSearchPage = () => {
     searchAllCards(evt.keyword, 1);  
   }; 
 
+  const doSearch = async (keyword, page) =>{
+    let response = {};    
+    try {      
+      response = await searchCards(keyword, page) || {};  
+    } catch (error) {      
+      setHasError(true)
+    }
+    return response;
+  }
+
   const searchAllCards = async (keyword, pg = 1) => {  
     setSearching(true); 
-    const response = await searchCards(keyword, page);  
+    const response  =  await doSearch(keyword, pg)    
+    if(response.data){
     let items = response.data.cards;  
     setData(items, response, pg)
+    }
   }; 
+
+ 
 
   const getMoreCards = async () => {  
     let pg = page;  
     pg++;  
-    const response = await searchCards(keyword, pg);  
-    const items = cards.concat(response.data.cards);  
-    setData(items, response, pg)
+    const response = await doSearch(keyword, pg)   
+    if(response.data && response.data.cards.length > 0){
+      const items = cards.concat(response.data.cards);  
+      setData(items, response, pg)
+    }
   }; 
 
   const setData = (items, response, page) => {  
@@ -90,20 +107,19 @@ const CardSearchPage = () => {
         )}  
       </Formik>  
       <br />  
+      {
+        hasError ? <Error/>:  
+               
       <InfiniteScroll
         pageStart={page}
         loadMore={getMoreCards}
         hasMore={searching && totalCards > cards.length}
         loader={<Loading/>}
         threshold={5}
-        >   
-        <div className="grid">            
-            {cards.map((card, index) =>               
-            <ImageCard key = {index} {...card} />
-            )}
-        </div>  
-        <CardList items={cards} ></CardList>        
+        >        
+        <CardList items={cards}></CardList>        
         </InfiniteScroll>
+      }
     </div>  
   );  
 }  
